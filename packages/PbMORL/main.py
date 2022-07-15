@@ -26,16 +26,16 @@ if __name__ == "__main__":
         "duration": np.Infinity
     })
     # env = record_videos(env, "./packages/PbMORL/videos")
-    env = wrappers.Monitor(env, "./packages/PbMORL/videos", video_callable=lambda episode_id: True,force=True)
+    env = wrappers.Monitor(env, "./packages/PbMORL/videos", force=True)
 
     for tau in range(NUM_TRAJECTORIES):
         obs, done = env.reset(), False
         retrn = 0
         while not done:
+            env.render()
             action, _ = model.predict(obs, deterministic=True)
             obs, reward, done, info = env.step(action)
             retrn += reward
-            # env.render()
         print(retrn)
 
     env.close()
