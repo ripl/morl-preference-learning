@@ -10,6 +10,8 @@ warnings.simplefilter(action='ignore', category=FutureWarning)
 import sys
 sys.path.insert(0, './packages/MO-highway-env/')
 import highway_env
+sys.path.insert(0, './packages/MO-highway-env/highway-env/scripts/')
+from utils import record_videos
 
 TRAJ_TO_COMPARE = 10
 
@@ -20,7 +22,7 @@ if __name__ == "__main__":
     env.configure({
         "duration": np.Infinity
     })
-    # env = record_videos(env)
+    env = record_videos(env)
 
     for tau in range(TRAJ_TO_COMPARE):
         obs, done = env.reset(), False
