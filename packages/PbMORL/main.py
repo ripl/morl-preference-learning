@@ -24,7 +24,7 @@ if __name__ == "__main__":
         obs, done = env.reset(), False
         retrn = 0
         while not done:
-            action, _ = env.action_space.sample()
+            action = env.action_space.sample()
             obs, reward, done, info = env.step(action)
             retrn += reward
         print(retrn)
