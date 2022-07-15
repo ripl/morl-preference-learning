@@ -14,7 +14,7 @@ import highway_env
 TRAJ_TO_COMPARE = 10
 
 if __name__ == "__main__":
-    model = DQN.load("models/right_model")
+    model = DQN.load("./models/speed_model")
     env = gym.make("highway-v0")
     env.configure({
         "duration": np.Infinity
