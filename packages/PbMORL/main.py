@@ -13,7 +13,7 @@ import highway_env
 sys.path.insert(0, './packages/MO-highway-env/scripts/')
 from utils import record_videos
 
-TRAJ_TO_COMPARE = 10
+NUM_TRAJECTORIES = 10
 
 if __name__ == "__main__":
     model = DQN.load("./packages/PbMORL/models/speed_model")
@@ -22,15 +22,16 @@ if __name__ == "__main__":
     env.configure({
         "duration": np.Infinity
     })
-    env = record_videos(env)
+    env = record_videos(env, "./packages/PbMORL/videos")
 
-    for tau in range(TRAJ_TO_COMPARE):
+    for tau in range(NUM_TRAJECTORIES):
         obs, done = env.reset(), False
         retrn = 0
         while not done:
             action, _ = model.predict(obs, deterministic=True)
             obs, reward, done, info = env.step(action)
             retrn += reward
+            env.render()
         print(retrn)
 
     env.close()
