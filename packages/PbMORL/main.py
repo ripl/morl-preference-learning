@@ -10,7 +10,7 @@ warnings.simplefilter(action='ignore', category=FutureWarning)
 import sys
 sys.path.insert(0, './packages/MO-highway-env/')
 import highway_env
-sys.path.insert(0, './packages/MO-highway-env/highway-env/scripts/')
+sys.path.insert(0, './packages/MO-highway-env/scripts/')
 from utils import record_videos
 
 TRAJ_TO_COMPARE = 10
