@@ -10,8 +10,10 @@ warnings.simplefilter(action='ignore', category=FutureWarning)
 import sys
 sys.path.insert(0, './packages/MO-highway-env/')
 import highway_env
-sys.path.insert(0, './packages/MO-highway-env/scripts/')
-from utils import record_videos
+# sys.path.insert(0, './packages/MO-highway-env/scripts/')
+# from utils import record_videos
+
+from gym import wrappers
 
 NUM_TRAJECTORIES = 10
 
@@ -19,10 +21,12 @@ if __name__ == "__main__":
     model = DQN.load("./packages/PbMORL/models/speed_model")
 
     env = gym.make("highway-v0")
+    env.seed(0)
     env.configure({
         "duration": np.Infinity
     })
-    env = record_videos(env, "./packages/PbMORL/videos")
+    # env = record_videos(env, "./packages/PbMORL/videos")
+    env = wrappers.Monitor(env, "./packages/PbMORL/videos", video_callable=lambda episode_id: True,force=True)
 
     for tau in range(NUM_TRAJECTORIES):
         obs, done = env.reset(), False
@@ -31,6 +35,7 @@ if __name__ == "__main__":
             action, _ = model.predict(obs, deterministic=True)
             obs, reward, done, info = env.step(action)
             retrn += reward
+            # env.render()
         print(retrn)
 
     env.close()
