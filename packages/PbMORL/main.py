@@ -31,7 +31,6 @@ if __name__ == "__main__":
             action, _ = model.predict(obs, deterministic=True)
             obs, reward, done, info = env.step(action)
             retrn += reward
-            env.render()
         print(retrn)
 
     env.close()
