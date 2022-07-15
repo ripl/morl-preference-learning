@@ -14,7 +14,7 @@ import highway_env
 TRAJ_TO_COMPARE = 10
 
 if __name__ == "__main__":
-    model = DQN.load("./packages/PbMORL/models/right_model")
+    model = DQN.load("./packages/PbMORL/models/speed_model")
 
     env = gym.make("highway-v0")
     env.configure({
