@@ -1,0 +1,3 @@
+[submodule "packages/MO-highway-env"]
+	path = packages/MO-highway-env
+	url = git@github.com:ripl/MO-highway-env.git
