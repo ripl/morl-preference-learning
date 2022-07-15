@@ -10,7 +10,24 @@ warnings.simplefilter(action='ignore', category=FutureWarning)
 import sys
 sys.path.insert(0, './packages/MO-highway-env/')
 import highway_env
-from highway_env.scripts.utils import record_videos, show_videos
+
+TRAJ_TO_COMPARE = 10
 
 if __name__ == "__main__":
-    print("Hello from Python")
+    model = DQN.load("models/right_model")
+    env = gym.make("highway-v0")
+    env.configure({
+        "duration": np.Infinity
+    })
+    # env = record_videos(env)
+
+    for tau in range(TRAJ_TO_COMPARE):
+        obs, done = env.reset(), False
+        retrn = 0
+        while not done:
+            action, _ = model.predict(obs, deterministic=True)
+            obs, reward, done, info = env.step(action)
+            retrn += reward
+        print(retrn)
+
+    env.close()
