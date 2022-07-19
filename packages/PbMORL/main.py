@@ -18,12 +18,13 @@ from gym import wrappers
 NUM_TRAJECTORIES = 10
 
 if __name__ == "__main__":
-    model = DQN.load("./packages/PbMORL/models/right_model")
+    model = DQN.load("./packages/PbMORL/models/speed_model")
 
-    env = gym.make("highway-v0")
+    env = gym.make("mo-highway-v0")
     env.seed(0)
     env.configure({
-        "duration": np.Infinity
+        "duration": np.Infinity,
+        "cur_reward": 0
     })
     # env = record_videos(env, "./packages/PbMORL/videos")
     env = wrappers.Monitor(env, "./packages/PbMORL/videos", force=True)
