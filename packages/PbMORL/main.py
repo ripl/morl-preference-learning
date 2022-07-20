@@ -18,7 +18,7 @@ from gym import wrappers
 NUM_TRAJECTORIES = 10
 
 if __name__ == "__main__":
-    model = DQN.load("./packages/PbMORL/models/speed_model")
+    model = DQN.load("./packages/PbMORL/models/right_model")
 
     env = gym.make("mo-highway-v0")
     env.seed(0)
