@@ -1,6 +1,7 @@
 import gym
 from gym.wrappers import RecordVideo
 import numpy as np
+import os
 from stable_baselines3 import DQN
 
 import warnings
@@ -9,6 +10,8 @@ warnings.simplefilter(action='ignore', category=FutureWarning)
 import sys
 sys.path.insert(0, './packages/MO-highway-env/')
 import highway_env
+sys.path.insert(0, './packages/')
+from PbMORL.utils import clear_videos
 
 NUM_TRAJECTORIES = 10
 
@@ -27,6 +30,7 @@ if __name__ == "__main__":
     })
     
     # Video recording
+    clear_videos("./packages/PbMORL/videos")
     env = RecordVideo(env, video_folder="./packages/PbMORL/videos", episode_trigger=lambda e: True)
     env.unwrapped.set_record_video_wrapper(env)
 
@@ -42,3 +46,7 @@ if __name__ == "__main__":
         env.render()
         print(total_reward)
     env.close()
+
+    # Print Number of Videos Saved
+    # _, _, files = next(os.walk("./packages/PbMORL/videos"))
+    # print(len(files)/2)
