@@ -8,9 +8,9 @@ ARG MAINTAINER
 # ==================================================>
 # ==> Do not change the code below this line
 ARG BASE_REGISTRY=docker.io
-ARG BASE_ORGANIZATION=cpkbase
-ARG BASE_REPOSITORY=ubuntu
-ARG BASE_TAG=focal
+ARG BASE_ORGANIZATION=lorandcheng
+ARG BASE_REPOSITORY=pytorchcpk
+ARG BASE_TAG=latest
 
 # define base image
 FROM ${BASE_REGISTRY}/${BASE_ORGANIZATION}/${BASE_REPOSITORY}:${BASE_TAG}-${ARCH} as BASE
