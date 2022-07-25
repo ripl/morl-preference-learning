@@ -16,6 +16,10 @@ sys.path.insert(0, './packages/')
 from PbMORL.utils import clear_videos
 from PbMORL.training import train_policy
 
+VIDEO_PATH = './packages/PbMORL/videos'
+MODEL_PATH = './packages/PbMORL/models'
+LOG_PATH = './packages/PbMORL/highway_dqn/'
+
 def main(argv):
     try:
         opts, args = getopt.getopt(argv,"tr:p:v",["train", "reward=", "policy=", "video"])
@@ -49,13 +53,13 @@ def main(argv):
             print('Training policy ' + str(env.config["cur_reward"]) + '...')
             env.configure({"duration": 40})
             env.reset()
-            train_policy(env, "policy_" + str(env.config["cur_reward"]))
+            train_policy(env, MODEL_PATH + "/policy_" + str(env.config["cur_reward"]), LOG_PATH)
         if opt in ('-v', '--video'):
-            clear_videos("./packages/PbMORL/videos")
-            env = RecordVideo(env, video_folder="./packages/PbMORL/videos", episode_trigger=lambda e: True)
+            clear_videos(VIDEO_PATH)
+            env = RecordVideo(env, video_folder=VIDEO_PATH, episode_trigger=lambda e: True)
             env.unwrapped.set_record_video_wrapper(env)
             
-            model = DQN.load("./packages/PbMORL/models/policy_" + str(policy_num))
+            model = DQN.load(MODEL_PATH + "/policy_" + str(policy_num))
 
             # Sample trajectories
             NUM_TRAJECTORIES = 10

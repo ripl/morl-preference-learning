@@ -1,7 +1,7 @@
 import gym
 from stable_baselines3 import DQN
 
-def train_policy(env, filename):
+def train_policy(env, model_path, log_path):
     model = DQN('MlpPolicy', env,
                 policy_kwargs=dict(net_arch=[256, 256]),
                 learning_rate=5e-4,
@@ -14,7 +14,7 @@ def train_policy(env, filename):
                 target_update_interval=50,
                 exploration_fraction=0.7,
                 verbose=1,
-                tensorboard_log="./packages/PbMORL/highway_dqn/")
+                tensorboard_log=log_path)
     model.learn(2e4)
-    model.save("./packages/PbMORL/models/" + filename)
+    model.save(model_path)
     return model
