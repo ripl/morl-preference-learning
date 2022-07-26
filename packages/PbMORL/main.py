@@ -51,7 +51,10 @@ def main(argv):
         if opt in ('-t', '--train'):
             print('Running in training mode...')
             print('Training policy ' + str(env.config["cur_reward"]) + '...')
-            env.configure({"duration": 40})
+            env.configure({
+                "render_agent": False,
+                "duration": 40
+            })
             env.reset()
             train_policy(env, MODEL_PATH + "/policy_" + str(env.config["cur_reward"]), LOG_PATH)
         if opt in ('-v', '--video'):
