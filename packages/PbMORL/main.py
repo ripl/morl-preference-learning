@@ -44,7 +44,7 @@ def main(argv):
 
     for opt, arg in opts:
         if opt in ('-r', '--reward'):
-            env.configure({"cur_reward": int(arg)})
+            env.configure({"cur_reward": str(arg)})
             env.reset()
         if opt in ('-p', '--policy'):
             policy_num = arg
