@@ -1,5 +1,6 @@
 import gym
 import numpy as np
+from pprint import pprint
 import sys
 
 import warnings
@@ -18,17 +19,19 @@ if __name__ == "__main__":
         "scaling": 5.5,
         "duration": np.Infinity,
         "action": {
-            "type": "ContinuousAction"
-        }
+            "type": "DiscreteMetaAction"
+        },
+        "cur_reward": "speed"
     })
     NUM_TRAJECTORIES = 10
     for tau in range(NUM_TRAJECTORIES):
         obs, done = env.reset(), False
-        total_reward = 0
         while not done:
             env.render()
             action = env.action_space.sample()
             obs, reward, done, info = env.step(action)
-            total_reward += reward
+            for r in info:
+                info[r] = round(info[r],3)
+            print("Selected reward:", reward)
+            pprint(info)
         env.render()
-        print('Return from trajectory', tau+1, ':', total_reward)
