@@ -1,2 +1,2 @@
 #!/bin/bash
-python3 -m PbMORL.main -r 0 -p 0 -v
+python3 -m PbMORL.main -r nocrash -p 2 -v
