@@ -2,7 +2,6 @@ import getopt
 import gym
 from gym.wrappers import RecordVideo
 import numpy as np
-import os
 from stable_baselines3 import DQN
 import sys
 
@@ -26,8 +25,8 @@ def main(argv):
     except:
         print('Invalid usage!')
         print('Use -t or --train to train policy on selected reward (0 by default)')
-        print('Use -r <reward num> or --reward <reward num> to select a reward')
-        print('Use -p <policy num> or --policy <policy num> to select a policy')
+        print('Use -r <reward> or --reward <reward> to select a reward')
+        print('Use -p <policy> or --policy <policy> to select a policy')
         print('Use -v or --video to enable video recording')
         sys.exit(2)
 
@@ -40,17 +39,17 @@ def main(argv):
         "scaling": 5.5,
         "duration": np.Infinity,
     })
-    policy_num = 0
+    policy = None
 
     for opt, arg in opts:
         if opt in ('-r', '--reward'):
             env.configure({"cur_reward": str(arg)})
             env.reset()
         if opt in ('-p', '--policy'):
-            policy_num = arg
+            policy = arg
         if opt in ('-t', '--train'):
             print('Running in training mode...')
-            print('Training policy ' + str(env.config["cur_reward"]) + '...')
+            print('Training', env.config["cur_reward"], 'policy...')
             env.configure({
                 "render_agent": False,
                 "duration": 40
@@ -62,11 +61,11 @@ def main(argv):
             env = RecordVideo(env, video_folder=VIDEO_PATH, episode_trigger=lambda e: True)
             env.unwrapped.set_record_video_wrapper(env)
             
-            model = DQN.load(MODEL_PATH + "/policy_" + str(policy_num))
+            model = DQN.load(MODEL_PATH + "/policy_" + str(policy))
 
             # Sample trajectories
             NUM_TRAJECTORIES = 10
-            print('Sampling', NUM_TRAJECTORIES, 'trajectories from policy', policy_num)
+            print('Sampling', NUM_TRAJECTORIES, 'trajectories from', policy, 'policy...')
             for tau in range(NUM_TRAJECTORIES):
                 obs, done = env.reset(), False
                 total_reward = 0
