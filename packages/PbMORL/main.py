@@ -19,7 +19,7 @@ from PbMORL.training import train_policy
 VIDEO_PATH = './packages/PbMORL/videos/'
 MODEL_PATH = './packages/PbMORL/models/'
 LOG_PATH = './packages/PbMORL/highway_dqn/'
-POLICY = 'speed'
+POLICY = 'distance'
 
 def main(argv):
     try:
