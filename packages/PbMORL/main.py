@@ -1,3 +1,4 @@
+from collections import Counter
 import getopt
 import gym
 from gym.wrappers import RecordVideo
@@ -15,8 +16,8 @@ sys.path.insert(0, './packages/')
 from PbMORL.utils import clear_videos
 from PbMORL.training import train_policy
 
-VIDEO_PATH = './packages/PbMORL/videos'
-MODEL_PATH = './packages/PbMORL/models'
+VIDEO_PATH = './packages/PbMORL/videos/'
+MODEL_PATH = './packages/PbMORL/models/'
 LOG_PATH = './packages/PbMORL/highway_dqn/'
 
 def main(argv):
@@ -43,11 +44,14 @@ def main(argv):
 
     for opt, arg in opts:
         if opt in ('-r', '--reward'):
+            assert arg in env.registered()
             env.configure({"cur_reward": str(arg)})
             env.reset()
         if opt in ('-p', '--policy'):
+            assert arg in env.registered()
             policy = arg
         if opt in ('-t', '--train'):
+            assert env.config["cur_reward"] in env.registered()
             print('Running in training mode...')
             print('Training', env.config["cur_reward"], 'policy...')
             env.configure({
@@ -55,25 +59,25 @@ def main(argv):
                 "duration": 40
             })
             env.reset()
-            train_policy(env, MODEL_PATH + "/policy_" + str(env.config["cur_reward"]), LOG_PATH)
+            train_policy(env, MODEL_PATH + str(env.config["cur_reward"]), LOG_PATH)
         if opt in ('-v', '--video'):
             clear_videos(VIDEO_PATH)
             env = RecordVideo(env, video_folder=VIDEO_PATH, episode_trigger=lambda e: True)
             env.unwrapped.set_record_video_wrapper(env)
             
-            model = DQN.load(MODEL_PATH + "/policy_" + str(policy))
+            model = DQN.load(MODEL_PATH + str(policy))
 
             # Sample trajectories
             NUM_TRAJECTORIES = 10
             print('Sampling', NUM_TRAJECTORIES, 'trajectories from', policy, 'policy...')
             for tau in range(NUM_TRAJECTORIES):
                 obs, done = env.reset(), False
-                total_reward = 0
+                total_reward = Counter()
                 while not done:
                     env.render()
                     action, _ = model.predict(obs, deterministic=True)
                     obs, reward, done, info = env.step(action)
-                    total_reward += reward
+                    total_reward += Counter(info)
                 env.render()
                 print('Return from trajectory', tau+1, ':', total_reward)
             env.close()
