@@ -19,16 +19,15 @@ from PbMORL.training import train_policy
 VIDEO_PATH = './packages/PbMORL/videos/'
 MODEL_PATH = './packages/PbMORL/models/'
 LOG_PATH = './packages/PbMORL/highway_dqn/'
+POLICY = 'speed'
 
 def main(argv):
     try:
-        opts, args = getopt.getopt(argv,"tr:p:v",["train", "reward=", "policy=", "video"])
+        opts, _ = getopt.getopt(argv,"tv",["train=", "video="])
     except:
         print('Invalid usage!')
-        print('Use -t or --train to train policy on selected reward (0 by default)')
-        print('Use -r <reward> or --reward <reward> to select a reward')
-        print('Use -p <policy> or --policy <policy> to select a policy')
-        print('Use -v or --video to enable video recording')
+        print('Use -t or --train to train policy')
+        print('Use -v or --video to view and record sampled trajectories')
         sys.exit(2)
 
     env = gym.make("mo-highway-v0")
@@ -40,36 +39,25 @@ def main(argv):
         "scaling": 5.5,
         "duration": np.Infinity,
     })
-    policy = None
 
-    for opt, arg in opts:
-        if opt in ('-r', '--reward'):
-            assert arg in env.registered()
-            env.configure({"cur_reward": str(arg)})
-            env.reset()
-        if opt in ('-p', '--policy'):
-            assert arg in env.registered()
-            policy = arg
+    for opt, _ in opts:
         if opt in ('-t', '--train'):
-            assert env.config["cur_reward"] in env.registered()
             print('Running in training mode...')
-            print('Training', env.config["cur_reward"], 'policy...')
+            print('Training policy:', POLICY)
             env.configure({
                 "render_agent": False,
                 "duration": 40
             })
             env.reset()
-            train_policy(env, MODEL_PATH + str(env.config["cur_reward"]), LOG_PATH)
+            train_policy(env, MODEL_PATH + POLICY, LOG_PATH)
         if opt in ('-v', '--video'):
             clear_videos(VIDEO_PATH)
             env = RecordVideo(env, video_folder=VIDEO_PATH, episode_trigger=lambda e: True)
             env.unwrapped.set_record_video_wrapper(env)
-            
-            model = DQN.load(MODEL_PATH + str(policy))
-
+            model = DQN.load(MODEL_PATH + POLICY)
             # Sample trajectories
             NUM_TRAJECTORIES = 10
-            print('Sampling', NUM_TRAJECTORIES, 'trajectories from', policy, 'policy...')
+            print('Sampling', NUM_TRAJECTORIES, 'trajectories from policy:', POLICY)
             for tau in range(NUM_TRAJECTORIES):
                 obs, done = env.reset(), False
                 total_reward = Counter()
@@ -81,10 +69,6 @@ def main(argv):
                 env.render()
                 print('Return from trajectory', tau+1, ':', total_reward)
             env.close()
-
-            # Print Number of Videos Saved
-            # _, _, files = next(os.walk("./packages/PbMORL/videos"))
-            # print(len(files)/2)
 
 if __name__ == "__main__":
     main(sys.argv[1:])
