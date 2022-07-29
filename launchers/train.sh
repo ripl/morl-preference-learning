@@ -1,3 +1,3 @@
 #!/bin/bash
-python3 -m PbMORL.main -r 2 -p 2 -t
+python3 -m PbMORL.main -r distance -p distance -t
 bash
