@@ -30,7 +30,7 @@ def main(argv):
         print('Use -v or --video to view and record sampled trajectories')
         sys.exit(2)
 
-    env = gym.make("mo-highway-v0")
+    env = gym.make("my-env")
     env.seed(0)
     env.configure({
         "screen_width": 1400,
